@@ -1,0 +1,94 @@
+/* Container styling */
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Title and subtitle */
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4a4e69;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #6c757d;
+  }
+  
+  /* Form styling */
+  .form {
+    margin-top: 20px;
+  }
+  
+  .file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4a4e69;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .file-label:hover {
+    background-color: #5a6178;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .upload-button {
+    padding: 10px 20px;
+    background-color: #4a4e69;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+  
+  .upload-button:hover {
+    background-color: #5a6178;
+  }
+  
+  .upload-button:disabled {
+    background-color: #c0c0c0;
+    cursor: not-allowed;
+  }
+  
+  /* Error and result messages */
+  .error-message {
+    margin-top: 10px;
+    color: #d9534f;
+    font-weight: bold;
+  }
+  
+  .result-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e9f7ef;
+    border: 1px solid #d4edda;
+    border-radius: 5px;
+  }
+  
+  .result-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #155724;
+  }
+  
+  .result {
+    color: #155724;
+  }
+  
