@@ -23,7 +23,7 @@ const ImageUpload = () => {
     }
 
     const formData = new FormData();
-    formData.append("image", selectedFile);
+    formData.append("file", selectedFile);  // Change "image" to "file" to match the backend
 
     setLoading(true);
     try {
@@ -32,8 +32,9 @@ const ImageUpload = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setResult(response.data.result);
+      setResult(JSON.stringify(response.data, null, 2));  // Display the full response data
     } catch (err) {
+      console.error(err);  // Log the error for debugging
       setError("Failed to analyze the image. Please try again.");
     } finally {
       setLoading(false);
@@ -62,7 +63,7 @@ const ImageUpload = () => {
       {result && (
         <div className="result-container">
           <h2 className="result-title">Analysis Result</h2>
-          <p className="result">{result}</p>
+          <pre className="result">{result}</pre>  {/* Use <pre> to format JSON */}
         </div>
       )}
     </div>
@@ -70,3 +71,4 @@ const ImageUpload = () => {
 };
 
 export default ImageUpload;
+
