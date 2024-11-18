@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "./ImageUpload.css";
-import { saveAs } from "file-saver";
+import { jsPDF } from "jspdf";
 
 const ImageUpload = () => {
   const [file, setFile] = useState(null);
@@ -65,121 +64,156 @@ const ImageUpload = () => {
   };
 
   const downloadPDF = () => {
-    const pdfContent = `
-      Thermo-Insights Analysis Report
-      
-      Patient Details:
-      - Name: ${formData.name}
-      - Age: ${formData.age}
-      - Address: ${formData.address}
-      - Date of Birth: ${formData.dob}
-      - Email: ${formData.email}
-      - Phone: ${formData.phone}
-      - Body Part: ${formData.bodyPart}
+    if (!result) return;
 
-      Analysis Results:
-      ${JSON.stringify(result, null, 2)}
-    `;
+    const pdf = new jsPDF();
+    pdf.setFontSize(16);
+    pdf.text("Thermalytics Analysis Report", 10, 10);
 
-    const blob = new Blob([pdfContent], { type: "application/pdf" });
-    saveAs(blob, "Thermo-Insights-Report.pdf");
+    pdf.setFontSize(12);
+    pdf.text("Patient Details:", 10, 20);
+    pdf.text(`- Name: ${formData.name}`, 10, 30);
+    pdf.text(`- Age: ${formData.age}`, 10, 40);
+    pdf.text(`- Address: ${formData.address}`, 10, 50);
+    pdf.text(`- Date of Birth: ${formData.dob}`, 10, 60);
+    pdf.text(`- Email: ${formData.email}`, 10, 70);
+    pdf.text(`- Phone: ${formData.phone}`, 10, 80);
+    pdf.text(`- Body Part: ${formData.bodyPart}`, 10, 90);
+
+    pdf.text("Analysis Results:", 10, 110);
+    pdf.text(`- Cold: ${result.conditions.cold}`, 10, 120);
+    pdf.text(`- Hot: ${result.conditions.hot}`, 10, 130);
+    pdf.text(`- Normal: ${result.conditions.normal}`, 10, 140);
+    pdf.text(`- Mean Intensity: ${result.mean_intensity.toFixed(2)}`, 10, 150);
+    pdf.text(`- Number of Regions: ${result.num_regions}`, 10, 160);
+
+    pdf.save("Thermo-Insights-Report.pdf");
   };
 
   return (
-    <div className="image-upload-container">
-      <div className="card">
-        <h1 className="title">Thermo-Insights</h1>
-        <p className="description">
-          Thermal imaging is a non-invasive diagnostic technique that uses heat
-          patterns to detect abnormalities. This tool aids in preliminary
-          diagnoses for conditions such as inflammation or poor blood
-          circulation.
-        </p>
+    <div className="flex items-center justify-center min-h-screen ">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
+        <h1 className="text-2xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-800 to-cyan-500">Check your Reports</h1>
 
-        <form className="form" onSubmit={handleSubmit}>
-          <label>Patient Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Patient Name:</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
 
-          <label>Age:</label>
-          <input
-            type="number"
-            name="age"
-            value={formData.age}
-            onChange={handleInputChange}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Age:</label>
+              <input
+                type="number"
+                name ="age"
+                value={formData.age}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
 
-          <label>Address:</label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Address:</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
 
-          <label>Date of Birth:</label>
-          <input
-            type="date"
-            name="dob"
-            value={formData.dob}
-            onChange={handleInputChange}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Date of Birth:</label>
+              <input
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
 
-          <label>Email ID:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email ID:</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
 
-          <label>Phone Number:</label>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Phone Number:</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
 
-          <label>Body Part:</label>
-          <input
-            type="text"
-            name="bodyPart"
-            value={formData.bodyPart}
-            onChange={handleInputChange}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Body Part:</label>
+              <input
+                type="text"
+                name="bodyPart"
+                value={formData.bodyPart}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
 
-          <label>Thermal Image:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Thermal Image:</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 mt-4 text-white font-semibold rounded-md ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} transition duration-200`}
+          >
             {loading ? "Analyzing..." : "Submit"}
           </button>
         </form>
 
-        {error && <p className="error">{error}</p>}
+        {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
 
         {result && (
-          <div className="result-container">
-            <h2>Analysis Report</h2>
-            <pre>{JSON.stringify(result, null, 2)}</pre>
-            <button onClick={downloadPDF}>Download PDF</button>
+          <div className="mt-6 p-4 border border-gray-300 rounded-md">
+            <h2 className="text-lg font-bold">Analysis Report</h2>
+            <pre className="whitespace-pre-wrap text-sm">{JSON.stringify(result, null, 2)}</pre>
+            <button
+              onClick={downloadPDF}
+              className="mt-4 w-full py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition duration-200"
+            >
+              Download PDF
+            </button>
           </div>
         )}
       </div>
@@ -188,6 +222,3 @@ const ImageUpload = () => {
 };
 
 export default ImageUpload;
-
-
-
