@@ -1,94 +1,72 @@
-/* Container styling */
-.container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
+body {
+    background-color: #e6f7ff;
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
   }
   
-  /* Title and subtitle */
+  .image-upload-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card {
+    text-align: center;
+  }
+  
   .title {
     font-size: 2rem;
-    font-weight: bold;
-    color: #4a4e69;
+    color: #007acc;
   }
   
-  .subtitle {
+  .description {
     font-size: 1rem;
-    margin: 10px 0;
-    color: #6c757d;
+    margin: 10px 0 20px;
   }
   
-  /* Form styling */
   .form {
-    margin-top: 20px;
+    text-align: left;
   }
   
-  .file-label {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4a4e69;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
     margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
   
-  .file-label:hover {
-    background-color: #5a6178;
-  }
-  
-  .file-input {
-    display: none;
-  }
-  
-  .upload-button {
+  button {
     padding: 10px 20px;
-    background-color: #4a4e69;
+    background-color: #007acc;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
   }
   
-  .upload-button:hover {
-    background-color: #5a6178;
+  button:hover {
+    background-color: #005f99;
   }
   
-  .upload-button:disabled {
-    background-color: #c0c0c0;
-    cursor: not-allowed;
-  }
-  
-  /* Error and result messages */
-  .error-message {
+  .error {
+    color: red;
     margin-top: 10px;
-    color: #d9534f;
-    font-weight: bold;
   }
   
   .result-container {
+    text-align: left;
     margin-top: 20px;
-    padding: 15px;
-    background-color: #e9f7ef;
-    border: 1px solid #d4edda;
-    border-radius: 5px;
   }
   
-  .result-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #155724;
-  }
-  
-  .result {
-    color: #155724;
-  }
   
