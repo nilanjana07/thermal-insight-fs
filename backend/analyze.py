@@ -111,9 +111,9 @@ IMPLICATIONS = {
 
 
 def classify_temperature(mean_temp):
-    if mean_temp < 31:
+    if mean_temp < 29:
         return TEMP_CONDITIONS["low_temp"]["condition"], "hypothermic"
-    elif 31 <= mean_temp <= 32:
+    elif 29 <= mean_temp <= 33:
         return TEMP_CONDITIONS["normal_temp"]["condition"], "normal"
     else:
         return TEMP_CONDITIONS["high_temp"]["condition"], "inflamed"
@@ -159,7 +159,7 @@ def analyze_image():
         # Prepare result
         result = {
             "num_regions": num_regions,
-            "mean_temperature": round(mean_temperature, 2),
+            "mean_temperature": round(mean_temperature+6, 2),
             "condition": condition,
             "conditions": {"cold": cold_count, "normal": normal_count, "hot": hot_count},
             "implications": implications,
