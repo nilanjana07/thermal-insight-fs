@@ -65,31 +65,71 @@ const ImageUpload = () => {
 
   const downloadPDF = () => {
     if (!result) return;
-
+  
     const pdf = new jsPDF();
-    pdf.setFontSize(16);
-    pdf.text("Thermalytics Analysis Report", 10, 10);
-
+    pdf.setFillColor(240, 248, 255);
+    pdf.rect(0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');// adding a background colour
+    // Add a custom font for "Thermanalysis" if needed
+    pdf.setFont("times", "bold");
+    pdf.setFontSize(18);
+  
+    // Add a logo/icon to the header
+  // Place icon in the top-left corner
+  
+    // Header
+    pdf.text("Thermanalysis Report", 105, 15, null, null, "center");
+  
+    // Draw a horizontal line below the header
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.5);
+    pdf.line(10, 30, 200, 30);
+  
+    // Patient Details Section
+    pdf.setFontSize(14);
+    pdf.setFont("times", "normal");
+    pdf.text(" Patient Details", 10, 40);
+  
+    pdf.text(`  Name: ${formData.name}`, 10, 50);
+    pdf.text(`  Age: ${formData.age}`, 10, 60);
+    pdf.text(`  Address: ${formData.address}`, 10, 70);
+    pdf.text(`  Date of Birth: ${formData.dob}`, 10, 80);
+    pdf.text(`  Email: ${formData.email}`, 10, 90);
+    pdf.text(`  Phone: ${formData.phone}`, 10, 100);
+    pdf.text(`  Body Part: ${formData.bodyPart}`, 10, 110);
+  
+    // Analysis Results Section
+    pdf.text("  Analysis Results", 10, 130);
+    pdf.setFont("times", "italic");
+    pdf.setFontSize(14);
+  
+    const resultText = `  Mean Intensity: ${result.mean_temperature.toFixed(2)}
+  Implications: ${result.implications}
+  Number of Regions: ${result.num_regions}`;
+  
+    // Split text for implications to avoid overlapping
+    const splitResultText = pdf.splitTextToSize(resultText, 180);
+    pdf.text(splitResultText, 14, 140);
+  
+    // Footer with contact details and icon
     pdf.setFontSize(12);
-    pdf.text("Patient Details:", 10, 20);
-    pdf.text(`- Name: ${formData.name}`, 10, 30);
-    pdf.text(`- Age: ${formData.age}`, 10, 40);
-    pdf.text(`- Address: ${formData.address}`, 10, 50);
-    pdf.text(`- Date of Birth: ${formData.dob}`, 10, 60);
-    pdf.text(`- Email: ${formData.email}`, 10, 70);
-    pdf.text(`- Phone: ${formData.phone}`, 10, 80);
-    pdf.text(`- Body Part: ${formData.bodyPart}`, 10, 90);
-
-    pdf.text("Analysis Results:", 10, 110);
-    pdf.text(`- Cold: ${result.conditions.cold}`, 10, 120);
-    pdf.text(`- Hot: ${result.conditions.hot}`, 10, 130);
-    pdf.text(`- Normal: ${result.conditions.normal}`, 10, 140);
-    pdf.text(`- Mean Intensity: ${result.mean_intensity.toFixed(2)}`, 10, 150);
-    pdf.text(`- Number of Regions: ${result.num_regions}`, 10, 160);
-
-    pdf.save("Thermo-Insights-Report.pdf");
+    
+    pdf.text(
+      "Contact us: Email: support@thermanalysis.com | Phone: +1 234-567-8901",
+      40,
+      285,
+      null,
+      null,
+      "left"
+    );
+  
+    // Add a border around the document content
+    pdf.setDrawColor(0, 0, 0);
+    pdf.rect(10, 10, 190, 280);
+  
+    // Save the PDF
+    pdf.save("Thermanalysis-Report.pdf");
   };
-
+  
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
