@@ -89,6 +89,25 @@ IMPLICATIONS = {
         ),
         "normal":("Temperature seems normal. You should be good to go! kudos! :)"),
     },
+    "breast": {
+    "hypothermic": (
+        "- Could indicate poor blood circulation or exposure to extreme cold.\n"
+        "- Persistent low temperature might suggest underlying vascular or systemic conditions.\n"
+        "- Suggested remedies include keeping warm, gentle massage, and consulting a physician if symptoms persist.\n"
+        "- Suggested nutrition: Foods rich in iron (spinach, lentils) and vitamin E (almonds, sunflower seeds) to improve blood flow."
+    ),
+    "inflamed": (
+        "- Common causes include mastitis, injury, or allergic reactions.\n"
+        "- Persistent inflammation might suggest infection or an underlying medical condition like breast abscess.\n"
+        "- Symptoms may include redness, swelling, or localized pain.\n"
+        "- Suggested remedies include cold compress, over-the-counter anti-inflammatory medication, and medical consultation.\n"
+        "- Suggested nutrition: Foods rich in omega-3 fatty acids (salmon, flaxseeds) and antioxidants (blueberries, kale) to reduce inflammation."
+    ),
+    "normal": (
+        "Temperature seems normal. Everything looks good! Keep monitoring and maintaining a healthy lifestyle. Kudos! :)"
+    )
+},
+
     "default": {
         "hypothermic": (
             "- Generalized hypothermia may result from prolonged cold exposure or systemic conditions.\n"
@@ -152,9 +171,9 @@ def analyze_image():
 
         # Calculate conditions based on labeled regions
         temperatures = [region.mean_intensity * 25 + 20 for region in regions]
-        cold_count = sum(1 for t in temperatures if t < 33)
-        normal_count = sum(1 for t in temperatures if 33 <= t <= 37)
-        hot_count = sum(1 for t in temperatures if t > 37)
+        cold_count = sum(1 for t in temperatures if t < 30)
+        normal_count = sum(1 for t in temperatures if 30<= t <= 34)
+        hot_count = sum(1 for t in temperatures if t > 34)
 
         # Prepare result
         result = {
