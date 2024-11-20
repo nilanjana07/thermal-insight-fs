@@ -152,8 +152,8 @@ def analyze_image():
 
         # Calculate conditions based on labeled regions
         temperatures = [region.mean_intensity * 25 + 20 for region in regions]
-        cold_count = sum(1 for t in temperatures if t < 35)
-        normal_count = sum(1 for t in temperatures if 35 <= t <= 37)
+        cold_count = sum(1 for t in temperatures if t < 33)
+        normal_count = sum(1 for t in temperatures if 33 <= t <= 37)
         hot_count = sum(1 for t in temperatures if t > 37)
 
         # Prepare result

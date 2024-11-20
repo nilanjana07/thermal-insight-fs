@@ -114,7 +114,7 @@ const ImageUpload = () => {
     pdf.setFontSize(12);
     
     pdf.text(
-      "Contact us: Email: support@thermanalysis.com | Phone: +1 234-567-8901",
+      "Contact us: Email: support@thermanalysis.com | Phone: +91 9477976686",
       40,
       285,
       null,
@@ -246,8 +246,8 @@ const ImageUpload = () => {
 
         {result && (
           <div className="mt-6 p-4 border border-gray-300 rounded-md">
-            <h2 className="text-lg font-bold">Analysis Report</h2>
-            <pre className="whitespace-pre-wrap text-sm">{JSON.stringify(result, null, 2)}</pre>
+            <h2 className="text-lg font-bold">Analysis Report Generated!</h2>
+            <pre className="whitespace-pre-wrap text-sm hidden">{JSON.stringify(result, null, 2)}</pre>
             <button
               onClick={downloadPDF}
               className="mt-4 w-full py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition duration-200"
