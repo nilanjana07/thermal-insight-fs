@@ -101,15 +101,22 @@ const ImageUpload = () => {
     pdf.text("  Analysis Results", 10, 130);
     pdf.setFont("times", "italic");
     pdf.setFontSize(14);
+    const meanTemperature = result.result.mean_temperature ? result.result.mean_temperature.toFixed(2) : "N/A";
+    const implications = result.result.implications || "N/A";
+    const numRegions = result.result.num_regions || "N/A";
+    const resultText = `  Mean Intensity: ${meanTemperature} Implications: ${implications} Number of Regions: ${numRegions}`;
+   
+  // // Split text for implications to avoid overlapping
+  const splitResultText = pdf.splitTextToSize(resultText, 180);
+  pdf.text(splitResultText, 14, 140);
   
-    const resultText = `  Mean Intensity: ${result.mean_temperature.toFixed(2)}
-  Implications: ${result.implications}
-  Number of Regions: ${result.num_regions}`;
-  
-    // Split text for implications to avoid overlapping
-    const splitResultText = pdf.splitTextToSize(resultText, 180);
-    pdf.text(splitResultText, 14, 140);
-  
+    //gemini response section
+    pdf.setFontSize(14);
+    pdf.text(" Produced prediction", 10, 180);
+    const geminiResponseText = result.gemini_response;
+    const splitGeminiResponseText = pdf.splitTextToSize(geminiResponseText, 180);
+    pdf.text(splitGeminiResponseText, 14, 190);
+
     // Footer with contact details and icon
     pdf.setFontSize(12);
     

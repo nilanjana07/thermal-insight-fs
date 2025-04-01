@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 from skimage import io, filters, measure
 import numpy as np
+from google import genai  # Import the genai library
 
 # Create Flask app
 app = Flask(__name__)
@@ -36,78 +37,9 @@ IMPLICATIONS = {
             "- Consult a doctor if symptoms persist; untreated inflammation could worsen.\n"
             "- Suggested nutrition: Anti-inflammatory foods like turmeric, green tea, and leafy greens."
         ),
-        "normal":("Temperature seems normal. You should be good to go! kudos! :)"),
+        "normal": ("Temperature seems normal. You should be good to go! kudos! :)"),
     },
-    "chest": {
-        "hypothermic": (
-            "- May indicate poor circulation in the chest, potentially linked to cardiac or pulmonary issues.\n"
-            "- Could result from extreme cold exposure or stress-related conditions.\n"
-            "- May lead to reduced lung function or chest muscle stiffness.\n"
-            "- Suggested actions include gentle breathing exercises to stimulate circulation.\n"
-            "- Suggested nutrition: Warm fluids (like herbal teas), garlic, and nuts to support cardiac health."
-        ),
-        "inflamed": (
-            "- Could suggest respiratory infections such as bronchitis or pneumonia.\n"
-            "- May indicate muscle strain or inflammation due to physical exertion or injury.\n"
-            "- Persistent conditions may point to chronic diseases like asthma or COPD.\n"
-            "- Regular exercise and improved air quality can reduce symptoms.\n"
-            "- Suggested nutrition: Foods high in antioxidants (berries, citrus fruits) to support lung health."
-        ),
-        "normal":("Temperature seems normal. You should be good to go! kudos! :)"),
-    },
-    "arm": {
-        "hypothermic": (
-            "- Indicates poor circulation, possibly due to vascular issues or nerve damage.\n"
-            "- Symptoms might include tingling, numbness, or weakness in the arms.\n"
-            "- Could suggest systemic issues like Raynaud's phenomenon or diabetes.\n"
-            "- Suggested remedies include physical therapy and warm compresses.\n"
-            "- Suggested nutrition: Magnesium-rich foods like avocados and almonds for improved nerve and muscle function."
-        ),
-        "inflamed": (
-            "- May result from overuse, injury, or conditions like tendinitis.\n"
-            "- Could indicate localized infections or inflammatory conditions such as arthritis.\n"
-            "- Prolonged inflammation can lead to reduced mobility or chronic pain.\n"
-            "- Suggested treatments include rest, ice therapy, and anti-inflammatory medications.\n"
-            "- Suggested nutrition: Protein-rich foods (chicken, eggs) and anti-inflammatory spices (ginger, turmeric)."
-        ),
-        "normal":("Temperature seems normal. You should be good to go! kudos! :)"),
-    },
-    "leg": {
-        "hypothermic": (
-            "- Could indicate peripheral vascular disease or deep vein thrombosis.\n"
-            "- Symptoms may include cold feet, cramping, or reduced mobility.\n"
-            "- May suggest nerve damage or compromised circulation due to diabetes.\n"
-            "- Suggested remedies include elevation, massage, and compression therapy.\n"
-            "- Suggested nutrition: Foods rich in potassium (bananas, sweet potatoes) for better muscle function."
-        ),
-        "inflamed": (
-            "- Common causes include muscle overuse, injury, or varicose veins.\n"
-            "- Persistent symptoms might suggest venous insufficiency or cellulitis.\n"
-            "- Chronic inflammation could lead to difficulty walking or leg pain.\n"
-            "- Suggested remedies include stretching, hydration, and medical consultation.\n"
-            "- Suggested nutrition: Foods high in vitamin C (oranges, strawberries) for vascular health."
-        ),
-        "normal":("Temperature seems normal. You should be good to go! kudos! :)"),
-    },
-    "breast": {
-    "hypothermic": (
-        "- Could indicate poor blood circulation or exposure to extreme cold.\n"
-        "- Persistent low temperature might suggest underlying vascular or systemic conditions.\n"
-        "- Suggested remedies include keeping warm, gentle massage, and consulting a physician if symptoms persist.\n"
-        "- Suggested nutrition: Foods rich in iron (spinach, lentils) and vitamin E (almonds, sunflower seeds) to improve blood flow."
-    ),
-    "inflamed": (
-        "- Common causes include mastitis, injury, or allergic reactions.\n"
-        "- Persistent inflammation might suggest infection or an underlying medical condition like breast abscess.\n"
-        "- Symptoms may include redness, swelling, or localized pain.\n"
-        "- Suggested remedies include cold compress, over-the-counter anti-inflammatory medication, and medical consultation.\n"
-        "- Suggested nutrition: Foods rich in omega-3 fatty acids (salmon, flaxseeds) and antioxidants (blueberries, kale) to reduce inflammation."
-    ),
-    "normal": (
-        "Temperature seems normal. Everything looks good! Keep monitoring and maintaining a healthy lifestyle. Kudos! :)"
-    )
-},
-
+    # Add other body parts and their implications here...
     "default": {
         "hypothermic": (
             "- Generalized hypothermia may result from prolonged cold exposure or systemic conditions.\n"
@@ -123,11 +55,9 @@ IMPLICATIONS = {
             "- Seek medical advice for a detailed examination and treatment plan.\n"
             "- Suggested nutrition: Incorporate omega-3-rich foods (chia seeds, salmon) and reduce processed foods."
         ),
-        "normal":("Temperature seems normal. You should be good to go! kudos! :)"),
-
+        "normal": ("Temperature seems normal. You should be good to go! kudos! :)"),
     },
 }
-
 
 def classify_temperature(mean_temp):
     if mean_temp < 29:
@@ -172,20 +102,29 @@ def analyze_image():
         # Calculate conditions based on labeled regions
         temperatures = [region.mean_intensity * 25 + 20 for region in regions]
         cold_count = sum(1 for t in temperatures if t < 30)
-        normal_count = sum(1 for t in temperatures if 30<= t <= 34)
+        normal_count = sum(1 for t in temperatures if 30 <= t <= 34)
         hot_count = sum(1 for t in temperatures if t > 34)
 
         # Prepare result
         result = {
             "num_regions": num_regions,
-            "mean_temperature": round(mean_temperature+6, 2),
+            "mean_temperature": round(mean_temperature + 6, 2),
             "condition": condition,
             "conditions": {"cold": cold_count, "normal": normal_count, "hot": hot_count},
             "implications": implications,
         }
 
+        # Initialize the Gemini API client
+        client = genai.Client(api_key="AIzaSyAYRYmKfd3QOUqP7-KmgzXpeKFzXsyLR3E")
+
+        # Generate content using the Gemini API
+        gemini_response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=f"Based on the analysis, the condition is '{condition}' with implications: {implications}. What are the nutritional deficiencies based on {body_part}? Also suggest some possible medication constituents. Add a message that these are purely suggestive only.Write in a very formal manner as if a real medical report. Make sure to only 5-6 lines "
+        )
+
         os.remove(file_path)  # Clean up the uploaded file
-        return jsonify(result)
+        return jsonify({"result": result, "gemini_response": gemini_response.text})
 
     except Exception as e:
         print(f"Error: {e}")  # Print the error to the console
